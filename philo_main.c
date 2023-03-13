@@ -6,13 +6,13 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/13 17:40:31 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/13 18:08:03 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_init_mutex_fork(t_info *info, int *err)
+void	ft_mutex_init(t_info *info, int *err)
 {
 	int	i;
 
@@ -43,7 +43,7 @@ void	ft_info_init(t_info	*info, int argc, char **argv, int *err)
 		if (must_eat_cnt < 0)
 			print_error(0);
 	}
-	ft_init_mutex(info, err);
+	ft_mutex_init(info, err);
 }
 
 void	ft_set_philo(t_philo **philo, t_info *info)
@@ -62,6 +62,29 @@ void	ft_set_philo(t_philo **philo, t_info *info)
 		i++;
 	}
 	return (0);
+}
+
+void	ft_make_thread(t_philo *philo, t_info *info)
+{
+	
+}
+
+void	ft_seat_philo(t_philo *philo, t_info *info)
+{
+	int	i;
+
+	i = 0;
+	while (i < info->philo_number)
+	{
+		pthread_create(philo[i].thread, NULL, ft_make_thread, (&philo[i]));
+		i++;
+	}
+	i = 0;
+	while (i < info->philo_number)
+	{
+		pthread_join(philo[i], NULL);
+		i++;
+	}
 }
 
 int	main(int argc, char **argv)
