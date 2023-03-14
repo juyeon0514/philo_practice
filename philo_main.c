@@ -6,67 +6,23 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/13 18:08:03 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/14 15:33:57 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-void	ft_mutex_init(t_info *info, int *err)
+void	*ft_make_thread(void *arg)
 {
-	int	i;
+	t_philo	*philo;
 
-	if (pthread_mutex_init(&(info->print), NULL))
-		err = 1;
-	info->fork = malloc(sizeof(pthread_mutex_t) * info->philo_number);
-	while (i < info->philo_number)
+	philo = (t_philo *)arg;
+	//printf("i'm %dth philosopher\n", philo->idx);
+	/*while (!philo->state)
 	{
-		if (pthread_mutex_init(&(info->fork), NULL))
-			err = 1;
-		i++;
-	}
-}
-
-void	ft_info_init(t_info	*info, int argc, char **argv, int *err)
-{
-	info->philo_number = ft_atoi(argv[1]);
-	info->die_time = ft_atoi(argv[2]);
-	info->eat_time = ft_atoi(argv[3]);
-	info->think_time = ft_atoi(argv[4]);
-	info->start_time = gettimeofday(&start_time, NULL);
-	if (philo_number <= 0 || die_time < 0 || eat_time < 0 || think_time < 0 \
-	|| start_time < 0)
-		print_error(0);
-	if (argc == 6)
-	{
-		info->must_eat_cnt = ft_atoi(argv[5]);
-		if (must_eat_cnt < 0)
-			print_error(0);
-	}
-	ft_mutex_init(info, err);
-}
-
-void	ft_set_philo(t_philo **philo, t_info *info)
-{
-	int	i;
-
-	*philo = malloc(sizeof(philo) * info->philo_number);
-	i = 0;
-	while (i < info->philo_number)
-	{
-		(*philo)[i].idx = i;
-		(*philo)[i].left = i;
-		(*philo)[i].right = (i + 1) % info->philo_number;
-		(*philo)[i].eat_cnt = 0;
-		(*philo)[i].s_info = info;
-		i++;
-	}
+		
+	}*/
 	return (0);
-}
-
-void	ft_make_thread(t_philo *philo, t_info *info)
-{
-	
 }
 
 void	ft_seat_philo(t_philo *philo, t_info *info)
@@ -76,33 +32,56 @@ void	ft_seat_philo(t_philo *philo, t_info *info)
 	i = 0;
 	while (i < info->philo_number)
 	{
-		pthread_create(philo[i].thread, NULL, ft_make_thread, (&philo[i]));
+		printf("3 i'm %dth philosopher\n", philo[i].idx);
+		if (pthread_create(&philo[i].thread, NULL, ft_make_thread, (&philo[i])))
+			ft_print_error(3);
 		i++;
 	}
+	//ft_is_philo_finish(philo, info);
 	i = 0;
 	while (i < info->philo_number)
 	{
-		pthread_join(philo[i], NULL);
+		pthread_join(philo[i].thread, NULL);
 		i++;
 	}
+	//ft_free_thread(philo, info);
 }
 
 int	main(int argc, char **argv)
 {
-	t_philo	*philo;
-	t_info	info;
-	int		err;
+	t_philo			*philo;
+	t_mutex_struct	mutex_struct;
+	t_info			info;
+	int				i;
 
-	if (argc != 5 || argc != 6)
+	if (argc != 5 && argc != 6)
+		return (ft_print_error(0));
+	memset(&info, 0, sizeof(info));
+	if (ft_info_init(&info, argc, argv))
+		return (ft_print_error(0));
+	//philo = malloc(sizeof(philo) * info.philo_number);
+	ft_set_philo(&philo, &info);
+	i = 0;
+	if (pthread_mutex_init(&(mutex_struct.print), NULL))
+		ft_print_error(9);
+	if (pthread_mutex_init(&(mutex_struct.meal), NULL))
+		ft_print_error(9);
+	mutex_struct.fork = malloc(sizeof(pthread_mutex_t) * info.philo_number);
+	if (!mutex_struct.fork)
+		ft_print_error(1);
+	for (int j = 0; j < info.philo_number; j++)
+		printf("1 i'm %dth philosopher\n", philo[j].idx);
+	i = 0;
+	while (i < info.philo_number)
 	{
-		print_error(0);
-		return (1);
+		for (int j = 0; j < info.philo_number; j++)
+			printf("4 %d i'm %dth philosopher\n", j, philo[j].idx);
+		if (pthread_mutex_init(&(mutex_struct.fork[i]), NULL))
+			ft_print_error(9);
+		i++;
 	}
-	err = 0;
-	memset(&info, 0, sizeof(t_info));
-	ft_info_init(info, argc, argv, &err);
-	if (err)
-		return (1);
-	ft_set_philo(&philo, info);
-	ft_seat_philo(philo, info);
+	for (int j = 0; j < info.philo_number; j++)
+		printf("2 %d i'm %dth philosopher\n", j, philo[j].idx);
+	//ft_mutex_init(mutex_struct, &info);
+	ft_seat_philo(philo, &info);
 }

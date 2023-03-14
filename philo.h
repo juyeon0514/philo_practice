@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/13 17:17:59 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/14 15:35:49 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,8 @@
 # include <sys/wait.h> // waitpid
 # include <stdlib.h>
 # include <stdio.h>
+# include <string.h>
+# include <sys/time.h>
 
 enum e_error
 {
@@ -36,20 +38,29 @@ enum e_error
 	ERROR_MUTEX_UNLOCK
 };
 
+enum e_state
+{
+	EAT,
+	SLEEP,
+	THINKING,
+	DIED	
+};
+
 typedef struct s_philo
 {
-	pthread_t	thread;
-	int			idx;
-	int			left;
-	int			right;
-	int			eat_cnt;
-	struct		*s_info;
+	pthread_t				thread;
+	int						idx;
+	int						left;
+	int						right;
+	int						eat_cnt;
+	struct timeval			last_time;
+	struct s_info			*info;
+	strcut s_mutex_struct	*mutex;
+	int						state;
 }	t_philo;
 
 typedef struct s_info
 {
-	pthread_mutex_t	*fork;
-	pthread_mutex_t	print;
 	struct timeval	start_time;
 	int				die_time;
 	int				eat_time;
@@ -58,4 +69,17 @@ typedef struct s_info
 	int				must_eat_cnt;
 }	t_info;
 
+typedef struct s_mutex_struct
+{
+	pthread_mutex_t	*fork;
+	pthread_mutex_t	print;
+	pthread_mutex_t	meal;
+}	t_mutex_struct;
+
+int			ft_print_error(int a);
+int				ft_atoi(const char *str);
+struct timeval	ft_get_time(void);
+void	ft_set_philo(t_philo **philo, t_info *info);
+void	ft_mutex_init(t_mutex_struct *mutex_struct, t_info *info);
+int	ft_info_init(t_info	*info, int argc, char **argv);
 #endif
