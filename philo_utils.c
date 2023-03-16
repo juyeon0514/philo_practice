@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:00:57 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/14 13:47:48 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/16 22:57:30 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,10 +42,25 @@ int	ft_atoi(const char *str)
 	return (sign * num);
 }
 
-struct timeval	ft_get_time(void)
+long long	ft_get_time(void)
 {
 	struct timeval	cur;
 
-	gettimeofday(&cur, 0);
-	return (cur);
+	gettimeofday(&cur, NULL);
+	return ((cur.tv_sec * 1000) + (cur.tv_usec / 1000));
+}
+
+int	ft_isnum(char *argv)
+{
+	int	i;
+
+	i = 0;
+	while (argv[i])
+	{
+		if (argv[i] >= '0' && argv[i] <= '9')
+			i++;
+		else
+			return (0);
+	}
+	return (1);
 }

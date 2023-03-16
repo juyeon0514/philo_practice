@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/14 15:35:49 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/17 00:23:33 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,33 +53,41 @@ typedef struct s_philo
 	int						left;
 	int						right;
 	int						eat_cnt;
-	struct timeval			last_time;
+	long					last_time;
 	struct s_info			*info;
-	strcut s_mutex_struct	*mutex;
-	int						state;
+	struct s_mutex_struct	*mutex;
+	enum e_state			state;
 }	t_philo;
 
 typedef struct s_info
 {
-	struct timeval	start_time;
 	int				die_time;
 	int				eat_time;
-	int				think_time;
+	int				sleep_time;
 	int				philo_number;
 	int				must_eat_cnt;
+	int				finish;
+	long			start_time;
 }	t_info;
 
 typedef struct s_mutex_struct
 {
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	print;
-	pthread_mutex_t	meal;
+	pthread_mutex_t	monitor;
 }	t_mutex_struct;
 
-int			ft_print_error(int a);
+int				ft_print_error(int a);
 int				ft_atoi(const char *str);
-struct timeval	ft_get_time(void);
-void	ft_set_philo(t_philo **philo, t_info *info);
-void	ft_mutex_init(t_mutex_struct *mutex_struct, t_info *info);
-int	ft_info_init(t_info	*info, int argc, char **argv);
+long long		ft_get_time(void);
+int				ft_set_philo(t_philo **philo, t_info *info, \
+t_mutex_struct *mutex);
+void			ft_mutex_init(t_mutex_struct *mutex_struct, t_info *info);
+int				ft_info_init(t_info	*info, int argc, char **argv);
+int				ft_isnum(char *argv);
+void			ft_eat_philo(t_philo *philo, t_info *info, \
+t_mutex_struct *mutex);
+void			ft_check_time(t_philo *philo, t_info *info);
+int				ft_philo_print(int num, long start_time, char *comment, \
+t_philo *philo);
 #endif

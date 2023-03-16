@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/14 15:33:57 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/17 00:50:15 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,30 +14,70 @@
 
 void	*ft_make_thread(void *arg)
 {
-	t_philo	*philo;
+	t_philo			*philo;
+	t_info			*info;
+	t_mutex_struct	*mutex_struct;
 
 	philo = (t_philo *)arg;
-	//printf("i'm %dth philosopher\n", philo->idx);
-	/*while (!philo->state)
+	info = philo->info;
+	mutex_struct = philo->mutex;
+	while (philo->state != DIED)
 	{
-		
-	}*/
+		if (philo->idx % 2 == 0)
+			usleep(info->eat_time * 1000);
+		ft_eat_philo(philo, info, mutex_struct);
+		philo->state = SLEEP;
+		ft_philo_print(philo->idx, info->start_time, "is sleeping", philo);
+		philo->state = THINKING;
+		if (info->finish)
+			break ;
+		ft_check_time(philo, info);
+		ft_philo_print(philo->idx, info->start_time, "is thinking", philo);
+	}
 	return (0);
 }
 
-void	ft_seat_philo(t_philo *philo, t_info *info)
+void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
+{
+	int			i;
+	long		now;
+
+	while (!info->finish)
+	{
+		i = 0;
+		while (i < info->philo_number && philo->state != DIED)
+		{
+			pthread_mutex_lock(&(mutex->monitor));
+			now = ft_get_time();
+			if (now - philo[i].last_time > info->die_time)
+			{
+				philo->state = DIED;
+				ft_philo_print(philo->idx, info->start_time, "is died", philo);
+			}
+			pthread_mutex_unlock(&(mutex->monitor));
+		}
+		if (philo->state == DIED)
+			break ;
+		if ((philo->eat_cnt != 0) && (philo->eat_cnt == info->must_eat_cnt))
+		{
+			philo->state = DIED;
+			break ;
+		}
+	}
+}
+
+void	ft_seat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 {
 	int	i;
 
 	i = 0;
 	while (i < info->philo_number)
 	{
-		printf("3 i'm %dth philosopher\n", philo[i].idx);
 		if (pthread_create(&philo[i].thread, NULL, ft_make_thread, (&philo[i])))
 			ft_print_error(3);
 		i++;
 	}
-	//ft_is_philo_finish(philo, info);
+	ft_monitor(philo, info, mutex);
 	i = 0;
 	while (i < info->philo_number)
 	{
@@ -52,36 +92,16 @@ int	main(int argc, char **argv)
 	t_philo			*philo;
 	t_mutex_struct	mutex_struct;
 	t_info			info;
-	int				i;
 
 	if (argc != 5 && argc != 6)
 		return (ft_print_error(0));
 	memset(&info, 0, sizeof(info));
 	if (ft_info_init(&info, argc, argv))
 		return (ft_print_error(0));
-	//philo = malloc(sizeof(philo) * info.philo_number);
-	ft_set_philo(&philo, &info);
-	i = 0;
-	if (pthread_mutex_init(&(mutex_struct.print), NULL))
-		ft_print_error(9);
-	if (pthread_mutex_init(&(mutex_struct.meal), NULL))
-		ft_print_error(9);
-	mutex_struct.fork = malloc(sizeof(pthread_mutex_t) * info.philo_number);
-	if (!mutex_struct.fork)
-		ft_print_error(1);
-	for (int j = 0; j < info.philo_number; j++)
-		printf("1 i'm %dth philosopher\n", philo[j].idx);
-	i = 0;
-	while (i < info.philo_number)
-	{
-		for (int j = 0; j < info.philo_number; j++)
-			printf("4 %d i'm %dth philosopher\n", j, philo[j].idx);
-		if (pthread_mutex_init(&(mutex_struct.fork[i]), NULL))
-			ft_print_error(9);
-		i++;
-	}
-	for (int j = 0; j < info.philo_number; j++)
-		printf("2 %d i'm %dth philosopher\n", j, philo[j].idx);
-	//ft_mutex_init(mutex_struct, &info);
-	ft_seat_philo(philo, &info);
+	if (info.philo_number <= 1)
+		return (ft_print_error(1));
+	if (ft_set_philo(&philo, &info, &mutex_struct))
+		return (ft_print_error(1));
+	ft_mutex_init(&mutex_struct, &info);
+	ft_seat_philo(philo, &info, &mutex_struct);
 }

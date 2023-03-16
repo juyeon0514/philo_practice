@@ -1,12 +1,14 @@
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
 RMFLAGS = -f
 
 # file names
 MANDA_FILES = philo_init \
-			philo_main \
-			philo_utils\
+			philo_main  \
+			philo_utils \
+			philo_eat	\
+			philo_printf\
 
 
 # Directories
