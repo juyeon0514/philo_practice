@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/17 12:49:58 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/17 12:52:45 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,30 +22,6 @@
 # include <string.h>
 # include <sys/time.h>
 
-enum e_error
-{
-	ERROR_ARGUMENT_WRONG,
-	ERROR_MALLOC,
-	ERROR_FREE,
-	ERROR_THREAD_CREATE,
-	ERROR_THREAD_DETACH,
-	ERROR_THREAD_JOIN,
-	ERROR_SLEEP,
-	ERROR_GET_TIME,
-	ERROR_MUTEX_INIT,
-	ERROR_MUTEX_DESTROY,
-	ERROR_MUTEX_LOCK,
-	ERROR_MUTEX_UNLOCK
-};
-
-enum e_state
-{
-	EAT,
-	SLEEP,
-	THINKING,
-	DIED	
-};
-
 typedef struct s_philo
 {
 	pthread_t				thread;
@@ -57,7 +33,6 @@ typedef struct s_philo
 	long					last_sleep;
 	struct s_info			*info;
 	struct s_mutex_struct	*mutex;
-	enum e_state			state;
 }	t_philo;
 
 typedef struct s_info

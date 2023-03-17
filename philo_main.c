@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/17 12:51:50 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/17 13:14:16 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,23 @@ void	*ft_make_thread(void *arg)
 	return (0);
 }
 
+void	ft_free_thread(t_philo *philo, t_info *info, t_mutex_struct *mutex)
+{
+	int	i;
+
+	i = 0;
+	while (i < info->philo_number)
+	{
+		pthread_mutex_destroy(&(mutex->fork[i]));
+		i++;
+	}
+	pthread_mutex_destroy(&(mutex->print));
+	pthread_mutex_destroy(&(mutex->meal));
+	pthread_mutex_destroy(&(mutex->monitor));
+	free(philo);
+	free(mutex->fork);
+}
+
 void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 {
 	int			i;
@@ -41,24 +58,24 @@ void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	while (!info->finish)
 	{
 		i = -1;
-		while (++i < info->philo_number && philo[i].state != DIED)
+		while (++i < info->philo_number && philo->info->dead != 1)
 		{
 			pthread_mutex_lock(&mutex->monitor);
-			if (ft_get_time() - philo[i].last_time > info->die_time)
+			if (ft_get_time() - philo[i].last_time >= info->die_time)
 			{
+				ft_philo_print(philo[i].idx, \
+				ft_get_time() - info->start_time, "is died", philo);
 				info->dead = 1;
-				ft_philo_print(philo[i].idx, ft_get_time() - info->start_time, "is died", philo);
-				philo[i].state = DIED;
 			}
 			pthread_mutex_unlock(&mutex->monitor);
 		}
 		if (info->dead)
 			break ;
-		// if ((philo->eat_cnt != 0) && (philo->eat_cnt == info->must_eat_cnt))
-		// {
-		// 	info->finish = 1;
-		// 	break ;
-		// }
+		if ((philo->eat_cnt != 0) && (philo->eat_cnt == info->must_eat_cnt))
+		{
+			info->finish = 1;
+			break ;
+		}
 	}
 }
 
@@ -84,7 +101,7 @@ void	ft_seat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 		pthread_join(philo[i].thread, NULL);
 		i++;
 	}
-	//ft_free_thread(philo, info);
+	ft_free_thread(philo, info, mutex);
 }
 
 int	main(int argc, char **argv)
