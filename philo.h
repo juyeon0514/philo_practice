@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/17 00:23:33 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/17 12:49:58 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_philo
 	int						right;
 	int						eat_cnt;
 	long					last_time;
+	long					last_sleep;
 	struct s_info			*info;
 	struct s_mutex_struct	*mutex;
 	enum e_state			state;
@@ -67,6 +68,7 @@ typedef struct s_info
 	int				philo_number;
 	int				must_eat_cnt;
 	int				finish;
+	int				dead;
 	long			start_time;
 }	t_info;
 
@@ -75,6 +77,7 @@ typedef struct s_mutex_struct
 	pthread_mutex_t	*fork;
 	pthread_mutex_t	print;
 	pthread_mutex_t	monitor;
+	pthread_mutex_t	meal;
 }	t_mutex_struct;
 
 int				ft_print_error(int a);
@@ -90,4 +93,7 @@ t_mutex_struct *mutex);
 void			ft_check_time(t_philo *philo, t_info *info);
 int				ft_philo_print(int num, long start_time, char *comment, \
 t_philo *philo);
+void			ft_fork_pick(t_philo *philo, t_info *info, \
+t_mutex_struct *mutex);
+void			ft_sleep_or_think(t_philo *philo, t_info *info);
 #endif

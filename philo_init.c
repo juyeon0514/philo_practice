@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 10:21:49 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/17 00:23:46 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/17 03:14:02 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	ft_mutex_init(t_mutex_struct *mutex_struct, t_info *info)
 	if (pthread_mutex_init(&(mutex_struct->print), NULL))
 		ft_print_error(9);
 	if (pthread_mutex_init(&(mutex_struct->monitor), NULL))
+		ft_print_error(9);
+	if (pthread_mutex_init (&(mutex_struct->meal), NULL))
 		ft_print_error(9);
 	mutex_struct->fork = malloc(sizeof(pthread_mutex_t) * info->philo_number);
 	if (!mutex_struct->fork)
@@ -48,6 +50,7 @@ int	ft_set_philo(t_philo **philo, t_info *info, t_mutex_struct *mutex)
 		(*philo)[i].right = (i + 1) % info->philo_number;
 		(*philo)[i].eat_cnt = 0;
 		(*philo)[i].last_time = 0;
+		(*philo)[i].last_sleep = 0;
 		(*philo)[i].info = info;
 		(*philo)[i].mutex = mutex;
 		i++;
@@ -81,6 +84,7 @@ int	ft_info_init(t_info	*info, int argc, char **argv)
 	info->sleep_time = ft_atoi(argv[4]);
 	info->start_time = ft_get_time();
 	info->finish = 0;
+	info->dead = 0;
 	// if (info->philo_number <= 1)
 	// 	return (1);
 	if (argc == 6)
