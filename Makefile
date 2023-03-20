@@ -1,6 +1,6 @@
 NAME = philo
 CC = cc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address -g3
+CFLAGS = -Wall -Wextra -Werror
 RMFLAGS = -f
 
 # file names
@@ -63,4 +63,4 @@ fclean : clean
 
 re :
 	make fclean
-	make all%
+	make all

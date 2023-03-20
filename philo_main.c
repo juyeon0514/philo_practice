@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/17 13:14:16 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/20 18:01:02 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*ft_make_thread(void *arg)
 	info = philo->info;
 	mutex_struct = philo->mutex;
 	if (philo->idx % 2 == 0)
-		usleep(info->eat_time * 1000);
+		usleep(1000);
 	while (!info->dead)
 	{
 		ft_fork_pick(philo, info, mutex_struct);
@@ -41,7 +41,8 @@ void	ft_free_thread(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	i = 0;
 	while (i < info->philo_number)
 	{
-		pthread_mutex_destroy(&(mutex->fork[i]));
+		if (pthread_mutex_destroy(&(mutex->fork[i])))
+			ft_print_error(8);
 		i++;
 	}
 	pthread_mutex_destroy(&(mutex->print));
@@ -57,17 +58,18 @@ void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 
 	while (!info->finish)
 	{
-		i = -1;
+		i = 0;
 		while (++i < info->philo_number && philo->info->dead != 1)
 		{
-			pthread_mutex_lock(&mutex->monitor);
+			pthread_mutex_lock(&(mutex->monitor));
 			if (ft_get_time() - philo[i].last_time >= info->die_time)
 			{
 				ft_philo_print(philo[i].idx, \
 				ft_get_time() - info->start_time, "is died", philo);
 				info->dead = 1;
+				i++;
 			}
-			pthread_mutex_unlock(&mutex->monitor);
+			pthread_mutex_unlock(&(mutex->monitor));
 		}
 		if (info->dead)
 			break ;
@@ -98,7 +100,8 @@ void	ft_seat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	i = 0;
 	while (i < info->philo_number)
 	{
-		pthread_join(philo[i].thread, NULL);
+		if (pthread_join(philo[i].thread, NULL))
+			ft_print_error(4);
 		i++;
 	}
 	ft_free_thread(philo, info, mutex);
@@ -115,8 +118,6 @@ int	main(int argc, char **argv)
 	memset(&info, 0, sizeof(info));
 	if (ft_info_init(&info, argc, argv))
 		return (ft_print_error(0));
-	if (info.philo_number <= 1)
-		return (ft_print_error(1));
 	ft_mutex_init(&mutex_struct, &info);
 	if (ft_set_philo(&philo, &info, &mutex_struct))
 		return (ft_print_error(1));

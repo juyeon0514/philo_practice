@@ -6,14 +6,14 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/17 12:52:45 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/20 17:48:18 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef PHILO_H
 # define PHILO_H
 
-# include <unistd.h> // usleep, gettimeofday
+# include <unistd.h> // msleep, gettimeofday
 # include <pthread.h> // pthread_, pthread_mutex_
 # include <signal.h> // kill
 # include <sys/wait.h> // waitpid
@@ -21,6 +21,18 @@
 # include <stdio.h>
 # include <string.h>
 # include <sys/time.h>
+
+# define ERROR_ARGUMENT_WRONG 0
+# define ERROR_MALLOC 1
+# define ERROR_FREE 2
+# define ERROR_THREAD_CREATE 3
+# define ERROR_THREAD_JOIN 4
+# define ERROR_SLEEP 5
+# define ERROR_GET_TIME 6
+# define ERROR_MUTEX_INIT 7
+# define ERROR_MUTEX_DESTROY 8
+# define ERROR_MUTEX_LOCK 9
+# define ERROR_MUTEX_UNLOCK 10
 
 typedef struct s_philo
 {
@@ -57,7 +69,7 @@ typedef struct s_mutex_struct
 
 int				ft_print_error(int a);
 int				ft_atoi(const char *str);
-long long		ft_get_time(void);
+long			ft_get_time(void);
 int				ft_set_philo(t_philo **philo, t_info *info, \
 t_mutex_struct *mutex);
 void			ft_mutex_init(t_mutex_struct *mutex_struct, t_info *info);
@@ -71,4 +83,5 @@ t_philo *philo);
 void			ft_fork_pick(t_philo *philo, t_info *info, \
 t_mutex_struct *mutex);
 void			ft_sleep_or_think(t_philo *philo, t_info *info);
+int				ft_msleep(long time);
 #endif

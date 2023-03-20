@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 14:30:05 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/13 14:43:51 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/20 15:41:04 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	*count(void *arg)
 	{
 		printf("%s cnt %d\n", name, g_cnt);
 		g_cnt++;
-		usleep(1);
+		msleep(1);
 		i++;
 	}
 	pthread_mutex_unlock(&g_mutex);
