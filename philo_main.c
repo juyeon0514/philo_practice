@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/22 18:37:53 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/22 19:04:06 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 				ft_get_time() - info->start_time, "is died", philo);
 				info->dead = 1;
 			}
-			if ((philo[i].eat_cnt != 0) && (philo[i].eat_cnt == info->must_eat_cnt))
+			if (philo[i].eat_cnt != 0 && philo[i].eat_cnt == info->must_eat_cnt)
 			{
 				info->finish = 1;
 				break ;
