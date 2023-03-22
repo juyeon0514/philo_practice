@@ -6,9 +6,11 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/22 15:19:55 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/22 18:37:53 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "philo.h"
 
 #include "philo.h"
 
@@ -60,7 +62,7 @@ void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	while (!info->finish)
 	{
 		i = 0;
-		while (++i < info->philo_number && philo->info->dead != 1)
+		while (i < info->philo_number && info->dead != 1)
 		{
 			pthread_mutex_lock(&(mutex->monitor));
 			if (ft_get_time() - philo[i].last_time >= info->die_time)
@@ -68,17 +70,17 @@ void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 				ft_philo_print(philo[i].idx, \
 				ft_get_time() - info->start_time, "is died", philo);
 				info->dead = 1;
-				i++;
 			}
+			if ((philo[i].eat_cnt != 0) && (philo[i].eat_cnt == info->must_eat_cnt))
+			{
+				info->finish = 1;
+				break ;
+			}
+			i++;
 			pthread_mutex_unlock(&(mutex->monitor));
 		}
 		if (info->dead)
 			break ;
-		if ((philo->eat_cnt != 0) && (philo->eat_cnt == info->must_eat_cnt))
-		{
-			info->finish = 1;
-			break ;
-		}
 	}
 }
 

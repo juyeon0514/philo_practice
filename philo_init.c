@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/14 10:21:49 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/19 16:09:11 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/22 16:48:58 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ int	ft_info_init(t_info	*info, int argc, char **argv)
 	info->start_time = ft_get_time();
 	info->finish = 0;
 	info->dead = 0;
+	if (info->philo_number == 0 || info->die_time == 0)
+		return (1);
 	if (argc == 6)
 		info->must_eat_cnt = ft_atoi(argv[5]);
 	return (0);

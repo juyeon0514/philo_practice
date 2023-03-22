@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:43 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/22 15:23:20 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/22 16:46:03 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 int	ft_philo_print(int num, long time, char *comment, t_philo *philo)
 {
 	pthread_mutex_lock(&(philo->mutex->print));
-	if (philo->info->dead != 1)
+	if (!philo->info->dead)
 		printf("%ld %d %s\n", time, num, comment);
 	pthread_mutex_unlock(&(philo->mutex->print));
 	return (0);
