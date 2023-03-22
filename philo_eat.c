@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:43 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/20 17:56:53 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/20 18:22:09 by juykang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	ft_sleep_or_think(t_philo *philo, t_info *info)
 	ft_msleep(info->sleep_time);
 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
 "is thinking", philo);
-	ft_msleep(1);
+	//ft_msleep(1);
 }
 
 void	ft_fork_pick(t_philo *philo, t_info *info, t_mutex_struct *mutex)

@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:00:57 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/20 17:53:27 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/22 14:40:47 by juykang          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int	ft_atoi(const char *str)
 	return (sign * num);
 }
 
-long ft_get_time(void)
+long	ft_get_time(void)
 {
 	struct timeval	cur;
 
@@ -91,6 +91,6 @@ int	ft_msleep(long time)
 
 	end = ft_get_time() + time;
 	while (ft_get_time() < end)
-		usleep(50);
+		usleep(100);
 	return (0);
 }
