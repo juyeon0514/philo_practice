@@ -7,8 +7,7 @@ RMFLAGS = -f
 MANDA_FILES = philo_init \
 			philo_main  \
 			philo_utils \
-			philo_eat	\
-			philo_printf\
+			philo_do	\
 
 
 # Directories
