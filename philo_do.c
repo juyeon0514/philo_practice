@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:43 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/22 16:46:03 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/24 18:01:21 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	ft_eat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	ft_philo_print(philo->idx, philo->last_time - info->start_time, \
 "is eating", philo);
 	pthread_mutex_unlock(&(mutex->meal));
-	ft_msleep(info->eat_time);
+	ft_msleep(info->eat_time, info->philo_number);
 	philo->eat_cnt++;
 	pthread_mutex_unlock(&(mutex->fork[philo->right]));
 	pthread_mutex_unlock(&(mutex->fork[philo->left]));
@@ -55,7 +55,7 @@ void	ft_sleep_or_think(t_philo *philo, t_info *info)
 	philo->last_sleep = ft_get_time();
 	ft_philo_print(philo->idx, philo->last_sleep - info->start_time, \
 "is sleeping", philo);
-	ft_msleep(info->sleep_time);
+	ft_msleep(info->sleep_time, info->philo_number);
 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
 "is thinking", philo);
 }

@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/13 15:00:57 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/22 18:25:51 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/24 17:35:26 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,27 @@
 int	ft_print_error(int error)
 {
 	if (error == ERROR_ARGUMENT_WRONG)
-		printf("%s\n", "ERROR_ARGUMENT_WRONG");
+		printf("%s\n", "ERROR: ERROR_ARGUMENT_WRONG");
 	else if (error == ERROR_MALLOC)
-		printf("%s\n", "ERROR_MALLOC");
+		printf("%s\n", "ERROR: ERROR_MALLOC");
 	else if (error == ERROR_FREE)
-		printf("%s\n", "ERROR_FREE");
+		printf("%s\n", "ERROR: ERROR_FREE");
 	else if (error == ERROR_THREAD_CREATE)
-		printf("%s\n", "ERROR_THREAD_CREATE");
+		printf("%s\n", "ERROR: ERROR_THREAD_CREATE");
 	else if (error == ERROR_THREAD_JOIN)
-		printf("%s\n", "ERROR_THREAD_JOIN");
+		printf("%s\n", "ERROR: ERROR_THREAD_JOIN");
 	else if (error == ERROR_SLEEP)
-		printf("%s\n", "ERROR_SLEEP");
+		printf("%s\n", "ERROR: ERROR_SLEEP");
 	else if (error == ERROR_GET_TIME)
-		printf("%s\n", "ERROR_GET_TIME");
+		printf("%s\n", "ERROR: ERROR_GET_TIME");
 	else if (error == ERROR_MUTEX_INIT)
-		printf("%s\n", "ERROR_MUTEX_INIT");
+		printf("%s\n", "ERROR: ERROR_MUTEX_INIT");
 	else if (error == ERROR_MUTEX_DESTROY)
-		printf("%s\n", "ERROR_MUTEX_DESTROY");
+		printf("%s\n", "ERROR: ERROR_MUTEX_DESTROY");
 	else if (error == ERROR_MUTEX_LOCK)
-		printf("%s\n", "ERROR_MUTEX_LOCK");
+		printf("%s\n", "ERROR: ERROR_MUTEX_LOCK");
 	else
-		printf("%s\n", "ERROR_MUTEX_UNLOCK");
+		printf("%s\n", "ERROR: ERROR_MUTEX_UNLOCK");
 	return (1);
 }
 
@@ -85,12 +85,20 @@ int	ft_isnum(char *argv)
 	return (1);
 }
 
-int	ft_msleep(long time)
+int	ft_msleep(long time, int num)
 {
 	long	end;
 
 	end = ft_get_time() + time;
-	while (ft_get_time() < end)
-		usleep(100);
+	if (num < 100)
+	{
+		while (ft_get_time() < end)
+			usleep(50);
+	}
+	else
+	{
+		while (ft_get_time() < end)
+			usleep(100);
+	}
 	return (0);
 }

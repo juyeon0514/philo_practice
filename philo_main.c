@@ -6,11 +6,9 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/22 19:04:06 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/24 18:03:50 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
-
-#include "philo.h"
 
 #include "philo.h"
 
@@ -42,11 +40,16 @@ void	ft_free_thread(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	int	i;
 
 	i = 0;
-	while (i < info->philo_number)
+	if (info->philo_number == 1)
+		pthread_detach(philo[i].thread);
+	else
 	{
-		if (pthread_mutex_destroy(&(mutex->fork[i])))
-			ft_print_error(8);
-		i++;
+		while (i < info->philo_number)
+		{
+			if (pthread_mutex_destroy(&(mutex->fork[i])))
+				ft_print_error(8);
+			i++;
+		}
 	}
 	pthread_mutex_destroy(&(mutex->print));
 	pthread_mutex_destroy(&(mutex->meal));
@@ -101,7 +104,7 @@ void	ft_seat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	}
 	ft_monitor(philo, info, mutex);
 	i = 0;
-	while (i < info->philo_number)
+	while (info->philo_number != 1 && i < info->philo_number)
 	{
 		if (pthread_join(philo[i].thread, NULL))
 			ft_print_error(4);
