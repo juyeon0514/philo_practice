@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:43 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/24 18:01:21 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/27 17:36:23 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,29 @@ int	ft_philo_print(int num, long time, char *comment, t_philo *philo)
 
 void	ft_fork_pick(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 {
-	if (philo->idx % 2 != 0)
-		pthread_mutex_lock(&(mutex->fork[philo->left]));
-	else
+	if (philo->idx % 2 == 0)
 		pthread_mutex_lock(&(mutex->fork[philo->right]));
+	else
+		pthread_mutex_lock(&(mutex->fork[philo->left]));
 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
 "has taken a fork", philo);
-	if (philo->idx % 2 != 0)
-		pthread_mutex_lock(&(mutex->fork[philo->right]));
-	else
+	if (philo->idx % 2 == 0)
 		pthread_mutex_lock(&(mutex->fork[philo->left]));
+	else
+		pthread_mutex_lock(&(mutex->fork[philo->right]));
 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
 "has taken a fork", philo);
 }
+
+// void	ft_fork_pick(t_philo *philo, t_info *info, t_mutex_struct *mutex)
+// {
+// 	pthread_mutex_lock(&(mutex->fork[philo->right]));
+// 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
+// "has taken a fork", philo);
+// 	pthread_mutex_lock(&(mutex->fork[philo->left]));
+// 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
+// "has taken a fork", philo);
+// }
 
 void	ft_eat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 {
@@ -43,9 +53,9 @@ void	ft_eat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	philo->last_time = ft_get_time();
 	ft_philo_print(philo->idx, philo->last_time - info->start_time, \
 "is eating", philo);
+	philo->eat_cnt++;
 	pthread_mutex_unlock(&(mutex->meal));
 	ft_msleep(info->eat_time, info->philo_number);
-	philo->eat_cnt++;
 	pthread_mutex_unlock(&(mutex->fork[philo->right]));
 	pthread_mutex_unlock(&(mutex->fork[philo->left]));
 }

@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/24 18:03:50 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/27 18:38:47 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*ft_make_thread(void *arg)
 	info = philo->info;
 	mutex_struct = philo->mutex;
 	if (philo->idx % 2 == 0)
-		usleep(1000);
+		usleep(500);
 	while (!info->dead)
 	{
 		ft_fork_pick(philo, info, mutex_struct);
@@ -65,13 +65,13 @@ void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 	while (!info->finish)
 	{
 		i = 0;
+		pthread_mutex_lock(&(mutex->monitor));
 		while (i < info->philo_number && info->dead != 1)
 		{
-			pthread_mutex_lock(&(mutex->monitor));
 			if (ft_get_time() - philo[i].last_time >= info->die_time)
 			{
 				ft_philo_print(philo[i].idx, \
-				ft_get_time() - info->start_time, "is died", philo);
+				ft_get_time() - info->start_time, "died", philo);
 				info->dead = 1;
 			}
 			if (philo[i].eat_cnt != 0 && philo[i].eat_cnt == info->must_eat_cnt)
@@ -80,8 +80,8 @@ void	ft_monitor(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 				break ;
 			}
 			i++;
-			pthread_mutex_unlock(&(mutex->monitor));
 		}
+		pthread_mutex_unlock(&(mutex->monitor));
 		if (info->dead)
 			break ;
 	}

@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:34 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/24 17:50:36 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/28 15:49:38 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,11 @@ typedef struct s_philo
 	long					last_time;
 	long					last_sleep;
 	struct s_info			*info;
+	struct s_state			*state;
 	struct s_mutex_struct	*mutex;
 }	t_philo;
 
-typedef struct s_info
+typedef struct s_share_data
 {
 	int				die_time;
 	int				eat_time;
@@ -57,7 +58,8 @@ typedef struct s_info
 	int				finish;
 	int				dead;
 	long			start_time;
-}	t_info;
+	struct s_philo	*philo;
+}	t_share_data;
 
 typedef struct s_mutex_struct
 {
