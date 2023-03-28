@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:37:43 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/27 17:36:23 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/28 18:01:02 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,27 +37,17 @@ void	ft_fork_pick(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 "has taken a fork", philo);
 }
 
-// void	ft_fork_pick(t_philo *philo, t_info *info, t_mutex_struct *mutex)
-// {
-// 	pthread_mutex_lock(&(mutex->fork[philo->right]));
-// 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
-// "has taken a fork", philo);
-// 	pthread_mutex_lock(&(mutex->fork[philo->left]));
-// 	ft_philo_print(philo->idx, ft_get_time() - info->start_time, \
-// "has taken a fork", philo);
-// }
-
 void	ft_eat_philo(t_philo *philo, t_info *info, t_mutex_struct *mutex)
 {
 	pthread_mutex_lock(&(mutex->meal));
 	philo->last_time = ft_get_time();
+	philo->eat_cnt++;
 	ft_philo_print(philo->idx, philo->last_time - info->start_time, \
 "is eating", philo);
-	philo->eat_cnt++;
 	pthread_mutex_unlock(&(mutex->meal));
 	ft_msleep(info->eat_time, info->philo_number);
-	pthread_mutex_unlock(&(mutex->fork[philo->right]));
 	pthread_mutex_unlock(&(mutex->fork[philo->left]));
+	pthread_mutex_unlock(&(mutex->fork[philo->right]));
 }
 
 void	ft_sleep_or_think(t_philo *philo, t_info *info)

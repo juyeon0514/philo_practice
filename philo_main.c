@@ -6,7 +6,7 @@
 /*   By: juykang <juykang@student.42seoul.kr>       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/08 16:42:09 by juykang           #+#    #+#             */
-/*   Updated: 2023/03/27 18:38:47 by juykang          ###   ########seoul.kr  */
+/*   Updated: 2023/03/28 17:45:52 by juykang          ###   ########seoul.kr  */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*ft_make_thread(void *arg)
 	info = philo->info;
 	mutex_struct = philo->mutex;
 	if (philo->idx % 2 == 0)
-		usleep(500);
+		usleep(1000);
 	while (!info->dead)
 	{
 		ft_fork_pick(philo, info, mutex_struct);
